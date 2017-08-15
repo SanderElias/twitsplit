@@ -1,0 +1,9 @@
+<!-- available emoji {{(emojis|async).length}} -->
+<span *ngFor='let emoji of emojis|async'>{{emoji.chr}}</span>
+<!-- <ul>
+  <li *ngFor='let emoji of emojis|async'>{{emoji|json}}</li>
+</ul> -->
+
+<!-- <pre>
+<code>{{emojis|json:true}}</code>
+</pre> -->
