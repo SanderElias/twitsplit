@@ -1,5 +1,25 @@
 <!-- available emoji {{(emojis|async).length}} -->
-<span *ngFor='let emoji of emojis|async'>{{emoji.chr}}</span>
+<div>
+    <div>
+        <button (click)="totwemoji(list)" title='may take a wihile on a large selection!'>Twitter-look</button>
+        <select #sel>
+            <option value=""> --- alll --- </option>
+            <option *ngFor='let group of groups' [value]="group">{{group}}</option>
+        </select>
+        <select #selsub>
+            <option value=""> --- alll --- </option>
+            <option *ngFor='let subgroup of subgroups|async' [value]="subgroup">{{subgroup}}</option>
+        </select>
+
+
+    </div>
+    <div #list>
+        <span *ngFor='let emoji of emojis |async ' [title]="emoji.tags.join(' ')">
+            {{emoji.chr}}
+            <img *ngIf="emoji.twemojiData" class="emoji" [src]="emoji.twemojiData" [alt]="emoji.chr">
+        </span>
+    </div>
+</div>
 <!-- <ul>
   <li *ngFor='let emoji of emojis|async'>{{emoji|json}}</li>
 </ul> -->

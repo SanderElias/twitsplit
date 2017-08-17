@@ -1,17 +1,17 @@
 <!--The content below is only a placeholder and can be replaced.-->
 <div style="text-align:center">
-  <h1>
-    Twitsplit!
-  </h1>
+    <h1>
+        Twitsplit!
+    </h1>
 </div>
 <div fxLayout='column' style="width:96%;margin:auto;">
-  <h3 style="text-align:center">click on hthe twit sized parts to copy them to clipboard</h3>
-  <div fxLayout='row' fxLayoutAlign="space-between">
-    <div fxFlex="0 0 250px">
-      <app-editor #t></app-editor>
+    <h3 style="text-align:center">click on hthe twit sized parts to copy them to clipboard</h3>
+    <div fxLayout='row' fxLayoutAlign="space-between">
+        <div fxFlex="0 0 250px">
+            <app-editor #t></app-editor>
+        </div>
+        <div fxFlex="1 1 auto" fxLayout='row wrap' fxLayoutAlign="start start">
+            <app-tweet *ngFor="let tweet of t.tweets" [tweet]=' tweet '></app-tweet>
+        </div>
     </div>
-    <div fxFlex="1 1 auto" fxLayout='row wrap'>
-      <app-tweet *ngFor="let tweet of t.tweets" [tweet]=' tweet '></app-tweet>
-    </div>
-  </div>
 </div>

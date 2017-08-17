@@ -1,3 +1,4 @@
-<textarea name="" id="" cols="30" rows="30" (input)="split(t.value)" #t>
+<textarea name="" id="" cols="30" rows="30" (input)="split(text.value)" #text>
 </textarea>
-<app-emoji></app-emoji>
+<button (click)='lorum()'>Add Lorum</button>
+<app-emoji (selected)='insertText($event)'></app-emoji>

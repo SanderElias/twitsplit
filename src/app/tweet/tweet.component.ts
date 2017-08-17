@@ -1,4 +1,6 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ElementRef } from '@angular/core';
+
+declare var twemoji: any;
 
 @Component({
     selector: 'app-tweet',
@@ -7,10 +9,33 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class TweetComponent implements OnInit {
     @Input() tweet: any;
+    domEl: HTMLElement;
+    html = '';
 
-    constructor() {}
+    constructor(private ek: ElementRef) {}
 
-    ngOnInit() {}
+    ngOnInit() {
+        if (this.ek.nativeElement) {
+            this.domEl = this.ek.nativeElement;
+        }
+        this.html = this.parse(this.tweet);
+    }
+
+    parse(text) {
+        const chars = text.split('');
+        return chars.reduce((acc, char) => {
+            if (char === '\n') {
+                acc += '<br>';
+            } else {
+                acc += char;
+            }
+            return acc;
+        }, '');
+    }
+
+    ngAfterViewInit() {
+        twemoji.parse(this.domEl);
+    }
 
     copy() {
         copyTextToClipboard(this.tweet);
