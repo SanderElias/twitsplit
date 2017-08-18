@@ -9,11 +9,12 @@ import { UnitableService } from './unitable.service';
 import { HttpModule, JsonpModule } from '@angular/http';
 import { EmojiComponent } from './emoji/emoji.component';
 import { GroupfiltPipe } from './groupfilt.pipe';
+import { EventBusService } from './event-bus.service';
 
 @NgModule({
     declarations: [AppComponent, EditorComponent, TweetComponent, EmojiComponent, GroupfiltPipe],
     imports: [BrowserModule, FlexLayoutModule, HttpModule, JsonpModule],
-    providers: [UnitableService],
+    providers: [UnitableService, EventBusService],
     bootstrap: [AppComponent]
 })
 export class AppModule {}

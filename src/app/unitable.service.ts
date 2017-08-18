@@ -123,6 +123,8 @@ export class UnitableService implements OnInit {
         // return;
 
         async function loadIt() {
+            console.log('start ftech');
+            console.time('fetch icons form cache');
             for (const token of tokens) {
                 try {
                     await self.loadIcon(token, fails);
@@ -131,7 +133,7 @@ export class UnitableService implements OnInit {
                     localStorage.setItem('failedUrls', JSON.stringify(fails));
                 }
             }
-            console.log('keys', idbk.keys());
+            console.timeEnd('fetch icons form cache');
         }
     }
 
@@ -166,9 +168,10 @@ export class UnitableService implements OnInit {
                         canvas.height = img.naturalHeight;
                         canvas.getContext('2d').drawImage(img, 0, 0);
                         token.twemojiData = canvas.toDataURL();
-                        // console.log('loaded, and put in DB', iconIndentifier);
-                        idbk.set(iconIndentifier, token.twemojiData);
-                        // .then(
+                        console.log('loaded, and put in DB', iconIndentifier);
+                        idbk
+                            .set(iconIndentifier, token.twemojiData)
+                            .then(() => resolve(''));
                         //     () => console.log('It worked!'),
                         //     err => console.log('It failed!', err)
                         // );
