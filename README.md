@@ -9,7 +9,7 @@ The reason I made this, was because I was typing tweets that didn't fit the 140 
 
 Then I started to play around with emoji, I never realized there where so many. very much still a work in progress, but usefull as is.
 
-I dind't put in any styling (yet), aside from using [Angular Flex-layout](https://github.com/angular/flex-layout), and some borders.
+I didn't put in any styling (yet), aside from using [Angular Flex-layout](https://github.com/angular/flex-layout), and some borders.
 
 
 
