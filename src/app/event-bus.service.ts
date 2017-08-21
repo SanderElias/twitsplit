@@ -14,7 +14,7 @@ export class EventBusService {
     private next;
     constructor() {
         this.listen = new Observable(observer => {
-            this.next = observer.next;
+            this.next = (payload: Payload) => observer.next(payload);
             return _ => _ /* nothing to clean */;
         });
         this.channelEmmiter = this.channelEmmiter.bind(this);
@@ -27,16 +27,20 @@ export class EventBusService {
 
     channel(channelName: string): Observable<Payload> {
         return this.listen
-            .filter(e => e.cannel === channelName)
+            .filter(e => e.channel === channelName)
             .map(e => e.payload);
     }
 
     channelEmmiter(channelName) {
+        console.log('made listener for', channelName);
         return (payload: Payload): void =>
             this.emit({ channel: channelName, payload });
     }
 
-    emit({ channel, payload }: { channel: string; payload: any }): void {
-        this.next({ channel, payload });
+    emit({ channel, payload }: { channel: string; payload: Payload }): void {
+        console.log('emit', channel);
+        // make it async, as observables aren't by default.
+        // it needs to be async to prevent issues with usage in life-cycle hooks
+        Promise.resolve().then(() => this.next({ channel, payload }));
     }
 }

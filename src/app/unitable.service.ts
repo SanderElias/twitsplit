@@ -22,26 +22,12 @@ export class UnitableService implements OnInit {
     }
 
     async ngOnInit() {
-        // const s = document.createElement('script');
-        // s.type = 'text/template';
-        // s.src = 'http://unicode.org/Public/emoji/5.0/emoji-sequences.txt';
-        // s.addEventListener('load', (...args) => {
-        //     console.log(args, s);
-        // });
-        // document.head.appendChild(s);
-        // tslint:disable:no-console
-        // console.time('read file');
         const txt = await this.load();
-        // console.timeEnd('read file');
-        // console.time('parse');
         const tokens = this.parseUnicdeText(txt);
-        // console.timeEnd('parse');
-        // console.time('groupify');
         const { tags, groups } = this.groupify(tokens);
         this.tags = tags;
         this.groups = groups;
-        // console.timeEnd('groupify');
-        this.loadTwitdata(tokens).then(() => console.log('done loading twit'));
+        // this.loadTwitdata(tokens).then(() => console.log('done loading twit'));
         return tokens;
     }
 

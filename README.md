@@ -1,28 +1,16 @@
 # Twitsplit
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.3.0.
+[![styled with prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
+[![Build with Angular CLI](https://img.shields.io/badge/build%20with-Angular%20CLI-red.svg)](https://github.com/angular/angular-cli)
 
-## Development server
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+This is a personal project. I do fumble around with it from time to time.
+The reason I made this, was because I was typing tweets that didn't fit the 140 chr limit, and needed something a tad smarter to split them up, and insert numbering.
 
-## Code scaffolding
+Then I started to play around with emoji, I never realized there where so many. very much still a work in progress, but usefull as is.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+I dind't put in any styling (yet), aside from using [Angular Flex-layout](https://github.com/angular/flex-layout), and some borders.
 
-## Build
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
 
-## Running unit tests
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-Before running the tests make sure you are serving the app via `ng serve`.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).

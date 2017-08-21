@@ -11,6 +11,9 @@
             <app-editor #t></app-editor>
         </div>
         <div fxFlex="1 1 auto" fxLayout='row wrap' fxLayoutAlign="start start">
+            <ng-container *ngIf=" lastTweetCopied$ | async; let tweet">
+                <div [innerText]='tweet'></div>
+            </ng-container>
             <app-tweet *ngFor="let tweet of t.tweets" [tweet]=' tweet '></app-tweet>
         </div>
     </div>

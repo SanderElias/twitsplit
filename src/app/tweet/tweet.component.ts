@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, ElementRef } from '@angular/core';
+import { EventBusService } from '../event-bus.service';
 
 declare var twemoji: any;
 
@@ -11,14 +12,16 @@ export class TweetComponent implements OnInit {
     @Input() tweet: any;
     domEl: HTMLElement;
     html = '';
+    emit;
 
-    constructor(private ek: ElementRef) {}
+    constructor(private ek: ElementRef, private evb: EventBusService) {}
 
     ngOnInit() {
         if (this.ek.nativeElement) {
             this.domEl = this.ek.nativeElement;
         }
         this.html = this.parse(this.tweet);
+        this.emit = this.evb.channelEmmiter('tweets');
     }
 
     parse(text) {
@@ -38,6 +41,7 @@ export class TweetComponent implements OnInit {
     }
 
     copy() {
+        this.emit(this.tweet);
         copyTextToClipboard(this.tweet);
     }
 }
