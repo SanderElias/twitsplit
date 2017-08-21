@@ -1,7 +1,7 @@
 # Twitsplit
 
 [![styled with prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
-[![Build with Angular CLI](https://img.shields.io/badge/build%20with-Angular%20CLI-red.svg)](https://github.com/angular/angular-cli)
+[![Build with Angular CLI](https://img.shields.io/badge/built%20with-Angular%20CLI-blue.svg)](https://github.com/angular/angular-cli)
 
 
 This is a personal project. I do fumble around with it from time to time.
