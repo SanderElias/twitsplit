@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 
 import { AppComponent } from './app.component';
@@ -12,9 +12,16 @@ import { GroupfiltPipe } from './groupfilt.pipe';
 import { EventBusService } from './event-bus.service';
 
 @NgModule({
-    declarations: [AppComponent, EditorComponent, TweetComponent, EmojiComponent, GroupfiltPipe],
+    declarations: [
+        AppComponent,
+        EditorComponent,
+        TweetComponent,
+        EmojiComponent,
+        GroupfiltPipe
+    ],
     imports: [BrowserModule, FlexLayoutModule, HttpModule, JsonpModule],
     providers: [UnitableService, EventBusService],
-    bootstrap: [AppComponent]
+    bootstrap: [AppComponent],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AppModule {}

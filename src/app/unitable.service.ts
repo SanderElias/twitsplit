@@ -123,96 +123,93 @@ export class UnitableService implements OnInit {
         }
     }
 
-    loadIcon(token: Token, fails: string[]) {
-        const bases = {
-            base: 'https://twemoji.maxcdn.com/2/',
-            ext: '.png',
-            size: '72x72'
-        };
-        const iconIndentifier = grabTheRightIcon(token.chr);
+    loadIcon(token, fails) {
+        return loadIcon(token, fails);
+    }
+}
 
-        return new Promise(async (resolve, reject) => {
-            const icondata: string = (await idbk.get(
-                iconIndentifier
-            )) as string;
-            if (icondata) {
-                token.twemojiData = icondata;
-                return resolve('');
+export function loadIcon(
+    token: Token,
+    fails: string[] = JSON.parse(localStorage.getItem('failedUrls') || '[]')
+) {
+    const bases = {
+        base: 'https://twemoji.maxcdn.com/2/',
+        ext: '.png',
+        size: '72x72'
+    };
+    const iconIndentifier = grabTheRightIcon(token.chr);
+
+    return new Promise(async (resolve, reject) => {
+        const icondata: string = (await idbk.get(iconIndentifier)) as string;
+        if (icondata) {
+            token.twemojiData = icondata;
+            return resolve();
+        }
+        window.requestAnimationFrame(() => {
+            if (!iconIndentifier || fails.includes(iconIndentifier)) {
+                return resolve();
             }
-            window.requestAnimationFrame(() => {
-                if (!iconIndentifier || fails.includes(iconIndentifier)) {
-                    return resolve('');
-                }
-                const img: HTMLImageElement = document.createElement('img');
-                img.crossOrigin = 'anonymous';
-                img.addEventListener('load', () => {
-                    try {
-                        const canvas: HTMLCanvasElement = document.createElement(
-                            'canvas'
-                        );
-                        canvas.width = img.naturalWidth;
-                        canvas.height = img.naturalHeight;
-                        canvas.getContext('2d').drawImage(img, 0, 0);
-                        token.twemojiData = canvas.toDataURL();
-                        console.log('loaded, and put in DB', iconIndentifier);
-                        idbk
-                            .set(iconIndentifier, token.twemojiData)
-                            .then(() => resolve(''));
-                        //     () => console.log('It worked!'),
-                        //     err => console.log('It failed!', err)
-                        // );
-                    } catch (e) {
-                        // console.error(e);
-                        resolve('');
-                    }
-                });
-                img.addEventListener('error', () => {
-                    fails.push(iconIndentifier);
-                    reject();
-                });
-                img.src = defaultImageSrcGenerator(iconIndentifier, bases);
-            });
-        });
-
-        function defaultImageSrcGenerator(icon, options) {
-            return ''.concat(
-                options.base,
-                options.size,
-                '/',
-                icon,
-                options.ext
-            );
-        }
-        function grabTheRightIcon(rawText) {
-            const UFE0Fg = /\uFE0F/g,
-                U200D = String.fromCharCode(8205);
-            return toCodePoint(
-                rawText.indexOf(U200D) < 0
-                    ? rawText.replace(UFE0Fg, '')
-                    : rawText
-            );
-        }
-        function toCodePoint(unicodeSurrogates, sep = '-') {
-            let r = [],
-                c = 0,
-                p = 0,
-                i = 0;
-            while (i < unicodeSurrogates.length) {
-                c = unicodeSurrogates.charCodeAt(i++);
-                if (p) {
-                    // tslint:disable-next-line:no-bitwise
-                    r.push(
-                        (65536 + ((p - 55296) << 10) + (c - 56320)).toString(16)
+            const img: HTMLImageElement = document.createElement('img');
+            img.crossOrigin = 'anonymous';
+            img.addEventListener('load', () => {
+                try {
+                    const canvas: HTMLCanvasElement = document.createElement(
+                        'canvas'
                     );
-                    p = 0;
-                } else if (55296 <= c && c <= 56319) {
-                    p = c;
-                } else {
-                    r.push(c.toString(16));
+                    canvas.width = img.naturalWidth;
+                    canvas.height = img.naturalHeight;
+                    canvas.getContext('2d').drawImage(img, 0, 0);
+                    token.twemojiData = canvas.toDataURL();
+                    console.log('loaded, and put in DB', iconIndentifier);
+                    idbk
+                        .set(iconIndentifier, token.twemojiData)
+                        .then(() => resolve());
+                    //     () => console.log('It worked!'),
+                    //     err => console.log('It failed!', err)
+                    // );
+                } catch (e) {
+                    // console.error(e);
+                    resolve();
                 }
+            });
+            img.addEventListener('error', () => {
+                fails.push(iconIndentifier);
+                reject();
+            });
+            img.src = defaultImageSrcGenerator(iconIndentifier, bases);
+        });
+    });
+
+    function defaultImageSrcGenerator(icon, options) {
+        return ''.concat(options.base, options.size, '/', icon, options.ext);
+    }
+    function grabTheRightIcon(rawText) {
+        const UFE0Fg = /\uFE0F/g,
+            U200D = String.fromCharCode(8205);
+        return toCodePoint(
+            rawText.indexOf(U200D) < 0 ? rawText.replace(UFE0Fg, '') : rawText
+        );
+    }
+    function toCodePoint(unicodeSurrogates, sep = '-') {
+        let r = [],
+            c = 0,
+            p = 0,
+            i = 0;
+        while (i < unicodeSurrogates.length) {
+            c = unicodeSurrogates.charCodeAt(i++);
+            if (p) {
+                // tslint:disable-next-line:no-bitwise
+                r.push(
+                    (65536 + ((p - 55296) << 10) + (c - 56320)).toString(16)
+                );
+                p = 0;
+            } else if (55296 <= c && c <= 56319) {
+                p = c;
+            } else {
+                r.push(c.toString(16));
             }
-            return r.join(sep);
         }
+        return r.join(sep);
     }
 }
 

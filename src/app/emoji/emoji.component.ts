@@ -8,7 +8,7 @@ import {
     ElementRef,
     ViewChild
 } from '@angular/core';
-import { UnitableService } from '../unitable.service';
+import { UnitableService, Token, loadIcon } from '../unitable.service';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/from';
 import 'rxjs/add/observable/fromEvent';
@@ -18,6 +18,7 @@ import 'rxjs/add/operator/startWith';
 import 'rxjs/add/operator/race';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/observable/combineLatest';
+import { html, render } from 'lit-html';
 
 declare var twemoji: any;
 
@@ -37,7 +38,8 @@ export class EmojiComponent implements OnInit {
     @Output() selected = new EventEmitter<string>();
     // @HostListener('click', ['$event'])
     onClick(ev) {
-        if (ev.target.nodeName !== 'SPAN') {
+        console.log(ev.target.nodeName, ev.target.innerText);
+        if (ev.target.nodeName !== 'EMOJI-ICON') {
             return;
         }
         this.selected.emit(ev.target.innerText);
@@ -63,7 +65,7 @@ export class EmojiComponent implements OnInit {
                 'change'
             )
                 .map((e: any) => e.target.value)
-                .startWith('');
+                .startWith('Activities');
             const subgroups = Observable.fromEvent(
                 this.selsub.nativeElement,
                 'change'
@@ -113,3 +115,76 @@ export class EmojiComponent implements OnInit {
         //upIt.subscribe(e => (this.emojis = Promise.resolve(e)));
     }
 }
+
+class EmojiIcon extends HTMLElement {
+    private needsRender = false;
+    private _emoji: Token;
+    private wait: Promise<any>;
+
+    constructor() {
+        super();
+        this.attachShadow({ mode: 'open' });
+    }
+
+    set emoji(e) {
+        this._emoji = e;
+        this.wait = loadIcon(e);
+    }
+
+    iconRep() {
+        const buildImg = () => {
+            return html`<img src="${this._emoji.twemojiData}" alt="${this._emoji
+                .chr}" style="width:1em;height:1em;">`;
+        };
+
+        return async (part: any) => {
+            part.setValue(this._emoji.chr);
+            part.setValue(await this.wait.then(buildImg));
+        };
+    }
+
+    get innerText() {
+        return this._emoji.chr;
+    }
+
+    render() {
+        return html`${this.iconRep()}`;
+    }
+
+    connectedCallback() {
+        this.invalidate();
+    }
+
+    invalidate() {
+        if (!this.needsRender) {
+            this.needsRender = true;
+            Promise.resolve().then(() => {
+                this.needsRender = false;
+                render(this.render(), this.shadowRoot);
+            });
+        }
+    }
+}
+
+class ToolTip extends HTMLElement {
+    constructor() {
+        super();
+        this.attachShadow({ mode: 'open' });
+    }
+
+    render() {
+        return html`
+        <style>
+        :host {display:none;}
+        .tip {
+            min-height:1em;
+            min-widht:2em;
+            backgroundcolor:gray
+        }
+        </style>
+        <div class='tip'><slot></slot></div>
+        `;
+    }
+}
+customElements.define('tool-tip', ToolTip);
+customElements.define('emoji-icon', EmojiIcon);
